@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venda de Peças de Computador</title>
+<style>/* Definições gerais do cabeçalho */
+    header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1em;
+        background-color: #030303;
+        color: #fff;
+    }    
+
+    #logo-container {
+        display: flex;
+        align-items: center;
+    }
+    
+    h1 {
+        font-family: 'Pacifico', cursive;
+        font-size: 2em;
+        margin: 0;
+    }
+    
+    #cart-summary {
+        display: flex;
+        align-items: center;
+    }
+    
+    /* Ícone do carrinho */
+    #cart-icon {
+        position: relative;
+    }
+    
+    #cart-icon i {
+        font-size: 2em;
+        margin-right: 20px;
+    }
+    
+    #cart-count {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #d40000;
+        color: #fff;
+        border-radius: 50%;
+        padding: 3px;
+    }
+    
+    /* Outras seções do site */
+    section {
+        text-align: center;
+    }
+    
+    /* Navegação */
+    nav {
+        background-color: #5a005a;
+        padding: 0.5em;
+        text-align: center;
+    }
+    
+    nav a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 1em;
+        margin: 0 1em;
+        transition: color 0.3s ease-in-out;
+    }
+    
+    nav a:hover {
+        color: #cccbcb;
+    }
+    
+    /* Efeito de escala nas seções ao passar o mouse */
+    section:hover {
+        transform: scale(1.02);
+    }
+    
+    /* Botões nas seções */
+    section button {
+        background-color: #007a8a;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease-in-out;
+    }
+    
+    section button:hover {
+        background-color: #008ba3;
+    }
+    
+    /* Rodapé */
+    footer {
+        background-color: #5a005a;
+        color: #e7e6e6;
+        padding: 1em;
+        text-align: center;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    #modal-bg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #cart-modal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        #close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        #cart-modal h2 {
+            margin-bottom: 15px;
+        }
+
+        #cart-items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #cart-items-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #000000;
+        }
+
+        #cart-items-list button {
+            background-color: #d40000;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #cart-items-list button:hover {
+            background-color: #a00000;
+        }
+
+        #modal-bg {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #cart-modal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            color: #000; /* Cor dos textos no modal */
+        }
+
+        #close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #333; /* Cor do botão de fechar */
+        }
+
+        #remove-item {
+            background-color: #d40000;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.8em;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        #remove-item:hover {
+            background-color: #a00000;
+        }
+
+        #cart-modal h2 {
+            margin-bottom: 15px;
+        }
+
+        #cart-items-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #cart-items-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+<body>
+    <header>
+        <div id="logo-container">
+            <img src="C:\Users\Klins\Desktop\Imagens site facul\icone site.png" alt="Logo">
+            <h1>Magic pc</h1>
+        </div>
+        <div id="user-actions">
+            <button onclick="location.href='login.html'">Login</button>
+            <button onclick="location.href='cadastro.html'">Cadastro</button>
+        </div>
+        <div id="cart-summary" onclick="openCartModal()">
+            <div id="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+    
+    <nav>
+        <a href="#memoria-ram">Memória RAM</a>
+        <a href="#placa-de-video">Placa de Vídeo</a>
+        <a href="#placa-mae">Placa Mãe</a>
+        <a href="#processador">Processador</a>
+    </nav>
+
+    <section>
+        <h2 id="memoria-ram">Memória Gamer Husky Gaming, 8GB, 2666MHz, DDR4, Preto</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Memória Gamer Husky Gaming.jpg" alt="memoria-ram" width="600">
+        <p>- DDR4</p>
+        <p>- 2666MHz</p>    
+        <p>- 8GB</p>
+        <p>- Cor preta</p>
+        <p>Preço: R$99,99</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="memoria-ram">MEMORIA TEAM GROUP T-FORCE VULCAN PICHAU, 8GB, DDR4, 3200MHZ, VERMELHA</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\MEMORIA TEAM GROUP T-FORCE VULCAN PICHAU.jpg" alt="memoria-ram" width="600">
+        <p>- DDR4</p>
+        <p>- 3200MHz</p>
+        <p>- 8GB</p>    
+        <p>- cor vermelha</p>    
+        <p>Preço: R$99,98</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="memoria-ram">Memória Rise Mode Z, 16GB, 3200MHz, DDR4, Preto</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Memória Rise Mode Z.jpg" alt="memoria-ram" width="600">
+        <p>- DDR4</p>
+        <p>- 3200MHz</p>
+        <p>- 16GB</p> 
+        <p>- Cor Preto</p>
+        <p>Preço: R$199,99</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="memoria-ram">Memória DDR4 SuperFrame RGB, 16GB, 3200MHz, Gray</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Memória DDR4 SuperFrame RGB.jpg" alt="memoria-ram" width="600">
+        <p>- DDR4</p>
+        <p>- 3200MHz</p>
+        <p>- 16GB</p>
+        <p>- Cor Gray</p>
+        <p>- RGB</p>
+        <p>Preço: R$289,00</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-mae">Placa Mãe ASUS Prime H510M-A</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Placa Mãe ASUS Prime H510M-A.jpg" alt="memoria-ram" width="600">
+        <p>- Soquete Intel LGA 1200</p>
+        <p>- Refrigeração abrangente: dissipador de calor no VRM, dissipador de calor no M.2, dissipador de calor no PCH e Fan Xpert +</p>
+        <p>- Conectividade ultrarrápida: slot M.2 32Gbps, Ethernet Realtek 1Gb e USB 3.2 Gen 1</p>
+        <p>- Iluminação Aura Sync RGB</p>
+        <p>- 5X Protection III: Múltiplas proteções de hardware para cobertura geral</p>
+        <p>Preço: R$ 623,52</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-mae">Placa Mãe Gigabyte H610M (rev. 1.0)</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Placa Mãe Gigabyte H610M.jpg" alt="placa-mae" width="600">
+        <p>- Suporta processadores da série Intel Core de 12ª geração</p>
+        <p>- DDR4 sem buffer não ECC de canal duplo, 2 DIMMs</p>
+        <p>- Design de VRM Digital Híbrido 6+1+1</p>
+        <p>- Intel GbE LAN com software cFosSpeed Internet Accelerator</p>
+        <p>- NVMe PCIe 3.0 x4 M.2</p>
+        <p>- Capacitores de áudio de alta qualidade e proteção de ruído de áudio</p>           
+        <p>- O Smart Fan 6 possui vários sensores de temperatura, cabeçotes de ventilador híbridos com FAN STOP</p>           
+        <p>- GIGABYTE APP Center, uso simples e fácil</p>
+        <p>- Projeto de Resistores Anti-Enxofre</p>
+        <p>Preço: R$ 699,99</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-mae">Placa Mãe Gigabyte B550M Aorus Elite</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Placa Mãe Gigabyte B550M Aorus Elite.jpg" alt="placa-mae" width="600">
+        <p>- socket AM4: Suporta AMD Ryzen 5000 series / Ryzen 5000 G-Series/ 3rd Gen Ryzen/ 2nd Gen Ryzen/ 1st Gen Ryzen/ 2nd Ge Ryzen com Radeon Vega Graphics/ 1st Gen Ryzen com Radeon Vega Gráficos/Athlon com processadores gráficos Radeon Vega</p>
+        <p>- 4 x soquetes DDR4 DIMM com suporte para até 128 GB (capacidade de DIMM único de 32 GB)</p>
+        <p>- Codec Realtek ALC892</p>
+        <p>- Chip Realtek GbE LAN</p>
+        <p>Preço: R$ 899,00</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-mae">Placa Mãe Gigabyte B660M Aorus PRO</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Placa Mãe Gigabyte B660M Aorus PRO.jpg" alt="placa-mae" width="600">
+        <p>- Soquete LGA1700</p>
+        <p>- CODEC de áudio Realtek</p>
+        <p>- Chip de LAN Intel 2,5 GbE (2,5 Gbps/1 Gbps/100 Mbps)</p>
+        <p>Preço: R$ 1.176,46</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-de-video">Placa de Vídeo Asus AMD Radeon RX 6700 XT</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Placa de Vídeo Asus AMD Radeon RX 6700 XT.jpg" alt="placa-de-video" width="600">
+        <p>- Tamanho da Memória: 12gb</p>
+        <p>- Tipo de vídeo: gddr6</p>
+        <p>- Interface de memória: 256 bits</p>
+        <p>- Saídas: HDMI DP</p>
+        <p>Preço: R$ 3.000,00</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-de-video">Placa de Vídeo Gigabyte NVIDIA GeForce RTX 4060 EAGLE OC, 8GB, GDDR6, DLSS, Ray Tracing</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Gigabyte NVIDIA GeForce RTX 4060 EAGLE.jpg" alt="placa-de-video" width="600">
+        <p>- Tamanho da Memória: 8GB</p>
+        <p>- Tipo da memória: GDDR6</p>
+        <p>- Interface de memória:128</p>
+        <p>- Saídas: HDMI DP</p>
+        <p>Preço: R$ 1.999,99</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-de-video">Placa de Vídeo GTX 750 Ti Duex NVIDIA GeForce, 2GB GDDR5</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\GTX 1050 Ti.jpg" alt="placa-de-video" width="600">
+        <p>- Tamanho da Memória: 2048MB</p>
+        <p>- Tipo da Memória: GDDR5</p>
+        <p>- MEM.BUS: 128bit</p>
+        <p>- Saída: DVI HDMI VGA</p>
+        <p>Preço: R$ 379,99</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="placa-de-video">Placa De Vídeo Pcyes Nvidia Geforce Gtx 1050 Ti, 4 GB Gddr5, 128bits, Dual Fan</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Gtx 750 Ti.jpg" alt="placa-de-video" width="600">
+        <p>- Quantidade de Memória: 4GB</p>
+        <p>- Tipo de Memória: GDDR5</p>
+        <p>- Saídas: DP, DVI, HDMI</p>
+        <p>- MEM.BUS: 128bit</p>
+        <p>preço: R$ 875,61</p>
+        <button>Adiocinar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="processador">Processador AMD Ryzen 5 5600, 3.5GHz (4.4GHz Max Turbo), Cache 35MB, AM4</h2>
+        <img src= "C:\Users\Klins\Desktop\Imagens site facul\amd-ryzen-5-5600.jpg" alt="processador" width="600">
+        <p>- 3.5GHz (4.4GHz Max Turbo)</p>
+        <p>- 6 Nucleos</p>
+        <p>- Cache 35MB</p>
+        <p>- AM4</p>
+        <p>Preço: R$ 1.597,71</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="processador">Processador Intel Core i5-10400F, 2.9GHz (4.3GHz Max Turbo), Cache 12MB, 6 Núcleos, 12 Threads, LGA 1200</h2>
+        <img src= "C:\Users\Klins\Desktop\Imagens site facul\Processador Intel Core i5-10400F.jpg" alt="processador" width="600">
+        <p>- 2.9GHz (4.3GHz Max Turbo)</p>
+        <p>- Cache 12MB</p>
+        <p>- 6 Núcleos</p>
+        <p>- 12 Threads</p>
+        <p>- LGA 1200</p>
+        <p>Preço: R$ 1.066,66</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="processador">Processador AMD Ryzen 7 7800X3D, 5.0GHz Max Turbo, Cache 104MB, AM5, 8 Núcleos, Vídeo Integrado</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\amd ryzen 7 7800X3D.jpg" alt="processador" width="600">
+        <p>- 5.0GHz Max Turbo
+        <p>- Cache 104MB
+        <p>- 8 Núcleos</p>
+        <p>- Vídeo Integrado</p>
+        <p>- AM5</p>
+        <p>Preço: R$ 3.294,11</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <section>
+        <h2 id="processador">Processador Intel Core i7-10700F, 2.9GHz (4.8GHz Max Turbo), Cache 16MB, LGA 1200</h2>
+        <img src="C:\Users\Klins\Desktop\Imagens site facul\Processador Intel Core I7-10700F.jpg" alt="processador" width="600">
+        <p>- 2.9GHz (4.8GHz Max Turbo)</p>
+        <p>- Cache 16MB</p>
+        <p>- 8 Núcleos</p>
+        <p>- LGA 1200</p>
+        <p>Preço: R$ 1.647,05</p>
+        <button>Adicionar ao Carrinho</button>
+    </section>
+
+    <div id="modal-bg">
+        <div id="cart-modal">
+            <span id="close-modal" onclick="closeCartModal()">X</span>
+            <h2>Itens no Carrinho</h2>
+            <ul id="cart-items-list"></ul>
+            <button id="remove-item" onclick="removeItem()">Remover Item</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Venda de Peças de Computador. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        // Lógica do carrinho
+        let carrinho = [];
+        let cartCount = document.getElementById('cart-count');
+        let cartItemsList = document.getElementById('cart-items-list');
+    
+        function adicionarAoCarrinho(item) {
+            carrinho.push(item);
+            cartCount.textContent = carrinho.length;
+    
+            let listItem = document.createElement('li');
+            listItem.textContent = `${item.nome} - ${item.preco}`;
+            
+            // Adiciona o botão de remoção
+            let removeButton = document.createElement('button');
+            removeButton.textContent = 'X';
+            removeButton.addEventListener('click', function () {
+                removerDoCarrinho(carrinho.indexOf(item));
+            });
+    
+            listItem.appendChild(removeButton);
+            cartItemsList.appendChild(listItem);
+    
+            alert('Item adicionado ao carrinho!');
+        }
+    
+        // Adiciona listeners aos botões de adicionar ao carrinho
+        let botoes = document.querySelectorAll('button');
+        botoes.forEach(function (botao, index) {
+            botao.addEventListener('click', function () {
+                let item = {
+                    nome: document.querySelectorAll('h2')[index].textContent,
+                    preco: document.querySelectorAll('p')[index * 2 + 1].textContent,
+                };
+    
+                adicionarAoCarrinho(item);
+            });
+        });
+    
+        // Adicione a lógica para remover itens do carrinho
+        function removerDoCarrinho(index) {
+            carrinho.splice(index, 1);
+            atualizarCarrinho();
+        }
+    
+        // Atualiza a exibição do carrinho
+        function atualizarCarrinho() {
+            cartCount.textContent = carrinho.length;
+            cartItemsList.innerHTML = ''; // Limpa a lista
+    
+            carrinho.forEach(function (item, index) {
+                let listItem = document.createElement('li');
+                listItem.textContent = `${item.nome} - ${item.preco}`;
+                
+                // Adiciona o botão de remoção
+                let removeButton = document.createElement('button');
+                removeButton.textContent = 'X';
+                removeButton.addEventListener('click', function () {
+                    removerDoCarrinho(index);
+                });
+    
+                listItem.appendChild(removeButton);
+                cartItemsList.appendChild(listItem);
+            });
+        }
+    
+        // Função para abrir o modal do carrinho
+        function openCartModal() {
+            document.getElementById('modal-bg').style.display = 'flex';
+        }
+    
+        // Função para fechar o modal do carrinho
+        function closeCartModal() {
+            document.getElementById('modal-bg').style.display = 'none';
+        }
+    
+        // Adiciona a lógica para remover o item do carrinho
+        function removeItem() {
+            alert('Item removido do carrinho!');
+            closeCartModal(); // Fecha o modal após remover o item (pode ajustar conforme necessário)
+        }
+    </script>
+    
+       
+</body>
+</html>      
